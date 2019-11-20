@@ -26,7 +26,7 @@ const files_to_download  = [{
   "targetDir": "../Plugins/Carrier/src/ios/libs",
   "md5": "cd4cdc9eda5c0e6a8a2b0e50879f2f3f"
 },{
-  "url": "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v0.5.1/ElastosHiveSDK-framework-for-trinity.zip",
+  "url": "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v0.5.2/ElastosHiveSDK-framework-for-trinity.zip",
   "filename": "ElastosHiveSDK-framework-for-trinity.zip",
   "sourceDirs": [
     "ElastosHiveSDK-framework-for-trinity/Alamofire.framework",
@@ -35,7 +35,7 @@ const files_to_download  = [{
     "ElastosHiveSDK-framework-for-trinity/Swifter.framework"
   ],
   "targetDir": "../Plugins/Hive/src/ios/libs",
-  "md5": "609cb16778ac59d0bbdcf48acfdd777c"
+  "md5": "f5a94cd84874fa841bc8beadaabc2a73"
 },{
   "url": "https://github.com/elastos/Elastos.Trinity.Plugins.Wallet/releases/download/spvsdk-V0.4.2/libspvsdk.zip",
   "filename": "libspvsdk.zip",
