@@ -3,7 +3,7 @@
 package-lock.json
 
 # Cordova
-/platforms
+
 /plugins
 /origin_platforms
 /origin_plugins
