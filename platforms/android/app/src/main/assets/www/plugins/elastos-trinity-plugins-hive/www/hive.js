@@ -138,9 +138,10 @@ var FilesImpl = /** @class */ (function () {
         this.objId = null;
         this.plugin = null;
     }
-//    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
+    FilesImpl.prototype.put = function (remoteFile,data,encrypt) {
+        return this.plugin.getPromise(this, 'putStringForFiles', [this.objId , remoteFile, data]);
+    };
+
 //    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
 //        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
 //    };
@@ -170,20 +171,27 @@ var ClientImpl = /** @class */ (function () {
     function ClientImpl() {
         this.objId = null;
         this.plugin = null;
+        this.ipfs = [];
+        this.files = [];
+        this.keyValues = [];
     }
-    ClientImpl.prototype.isConnect = function (onSuccess, onError) {
+    ClientImpl.prototype.isConnected = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
+//        ret.isConnect
         alert(JSON.stringify(ret));
-
+//
 //            var file = new FileImpl();
 //            file.objId = ret.fileId;
 //            file.plugin = me.plugin;
 //            me.files[file.objId] = file;
-//            if (onSuccess)
-//                onSuccess(file);
+            if (onSuccess)
+                onSuccess(ret.isConnect);
         };
-        exec(_onSuccess, onError, 'HivePlugin', 'isConnect', [this.objId]);
+        alert("call");
+        alert(this.objId);
+//        alert("this.objId");
+        exec(_onSuccess, onError, 'HivePlugin', 'isConnected', [this.objId]);
     };
     ClientImpl.prototype.disConnect = function (onSuccess, onError) {
         var me = this;
@@ -212,7 +220,7 @@ var ClientImpl = /** @class */ (function () {
         exec(_onSuccess, onError, 'HivePlugin', 'getIPFS', [this.objId , filePath]);
     };
 
-    ClientImpl.prototype.getFiles = function (filePath , onSuccess, onError) {
+    ClientImpl.prototype.getFiles = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
             var files = new FilesImpl();
@@ -228,10 +236,10 @@ var ClientImpl = /** @class */ (function () {
 //            if (onSuccess)
 //                onSuccess(file);
         };
-        exec(_onSuccess, onError, 'HivePlugin', 'getFiles', [this.objId , filePath]);
+        exec(_onSuccess, onError, 'HivePlugin', 'getFiles', [this.objId]);
     };
 
-    ClientImpl.prototype.getKeyValues = function (filePath , onSuccess, onError) {
+    ClientImpl.prototype.getKeyValues = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
             var keyValues = new KeyValuesImpl();
@@ -247,12 +255,12 @@ var ClientImpl = /** @class */ (function () {
 //            if (onSuccess)
 //                onSuccess(file);
         };
-        exec(_onSuccess, onError, 'HivePlugin', 'getKeyValues', [this.objId, filePath]);
+        exec(_onSuccess, onError, 'HivePlugin', 'getKeyValues', [this.objId]);
     };
 
-    ClientImpl.prototype.putStringForFiles = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'putStringForFiles', [this.objId, remoteFile, data]);
-    };
+//    ClientImpl.prototype.putStringForFiles = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'putStringForFiles', [this.objId, remoteFile, data]);
+//    };
     ClientImpl.prototype.getAsStringForFiles = function (remoteFile, data) {
         return this.plugin.getPromise(this, 'getAsStringForFiles', [this.objId, remoteFile, data]);
     };
@@ -311,7 +319,6 @@ var HiveManagerImpl = /** @class */ (function () {
     function HiveManagerImpl() {
         var _this = this;
         this.client = [];
-        this.ipfs = [];
         this.resultIndex = 0;
         this.resultEvent = [];
         this.loginCount = 0;

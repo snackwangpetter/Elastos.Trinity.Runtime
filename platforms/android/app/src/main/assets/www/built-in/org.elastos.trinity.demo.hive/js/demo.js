@@ -122,7 +122,7 @@ function create_onedrive_client() {
         }, onedrive_opts,success, null);
 }
 
-var client;
+
 
 
 
@@ -165,10 +165,10 @@ function create_ipfs_client() {
 var onedrive_commands = [
     { cmd: "help",      fn: help_onedrive,                   help: "help [cmd]"  },
     { cmd: "version",   fn: get_version,            help: "version"     },
-    { cmd: "isconnect",            fn: show_connect_status,           help: "isconnect"},
-    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs [client]"},
-    { cmd: "getfiles",            fn: get_files,           help: "getfiles [client]"},
-    { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues [client]"},
+    { cmd: "isconnected",            fn: show_connect_status,           help: "isconnected"},
+    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs"},
+    { cmd: "getfiles",            fn: get_files,           help: "getfiles"},
+    { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues"},
     { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
 //    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
 //    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
@@ -290,53 +290,128 @@ function get_version(args) {
 //    );
 //}
 //
+
+
+
+
+
+//function get_string_files(argv) {
+//    if (argv.length != 2) {
+//        display_others_msg("Invalid command syntax.");
+//        return;
+//    }
+//
+//    var destFileName = argv[1];
+//
+//    client.getFileLength(destFileName).then(
+//        function (ret) {
+//            display_others_msg(JSON.stringify(ret));
+//        },
+//        function (error) {
+//            display_others_msg("Create HiveFile error! " + error);
+//        });
+//}
+
+function show_connect_status(argv) {
+     if (argv.length != 1) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+    var success = function (ret) {
+        display_others_msg("Connect status is "+ret);
+    }
+     client.isConnected(success,null);
+}
+
+var client;
+var ipfs;
+var files;
+var keyvalues;
+function get_ipfs(argv) {
+     if (argv.length != 2) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+
+     client.getIPFS().then(
+         function (ret) {
+//             display_others_msg(ret.status);
+         ipfs = ret;
+         display_others_msg("success");
+         },
+         function (error) {
+             display_others_msg("show connect status error! " + error);
+         });
+}
+
+function get_files(argv) {
+//      if (argv.length != 1) {
+//          display_others_msg("Invalid command syntax.");
+//          return;
+//      }
+//
+//      client.getFiles(
+//          function (ret) {
+// //             display_others_msg(ret.status);
+//          files = ret;
+//          display_others_msg("success");
+//          },
+//          function (error) {
+//              display_others_msg("show connect status error! " + error);
+//          }));
+
+     if (argv.length != 1) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+    var success = function (ret) {
+        files = ret;
+        display_others_msg("success");
+    }
+
+     client.getFiles(success,null);
+}
+
+function get_keyvalues(argv) {
+      if (argv.length != 1) {
+          display_others_msg("Invalid command syntax.");
+          return;
+      }
+
+     if (argv.length != 1) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+    var success = function (ret) {
+        keyvalues = ret;
+        display_others_msg("success");
+    }
+
+     client.getKeyValues(success,null);
+ }
+
+
+
 function put_string_files(argv) {
     if (argv.length != 3) {
         display_others_msg("Invalid command syntax.");
         return;
     }
 
+    if(files==null){
+        display_others_msg("please getFiles first.");
+        return;
+    }
+
     var remoteFile = argv[1];
     var data = argv[2];
 
-    client.putStringForFiles(remoteFile,data).then(
+    files.put(remoteFile,data).then(
         function (ret) {
             display_others_msg(ret.status);
         },
         function (error) {
             display_others_msg("Create HiveFile error! " + error);
-        });
-}
-
-function get_string_files(argv) {
-    if (argv.length != 2) {
-        display_others_msg("Invalid command syntax.");
-        return;
-    }
-
-    var destFileName = argv[1];
-
-    client.getFileLength(destFileName).then(
-        function (ret) {
-            display_others_msg(JSON.stringify(ret));
-        },
-        function (error) {
-            display_others_msg("Create HiveFile error! " + error);
-        });
-}
-
-function show_connect_status(argv) {
-    if (argv.length != 1) {
-        display_others_msg("Invalid command syntax.");
-        return;
-    }
-
-    client.isConnect().then(
-        function (ret) {
-            display_others_msg(ret.status);
-        },
-        function (error) {
-            display_others_msg("show connect status error! " + error);
         });
 }
 //function put_hive_file(argv) {

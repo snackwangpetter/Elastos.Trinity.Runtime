@@ -78,7 +78,7 @@ HivePlugin extends TrinityPlugin {
                     this.disConnect(args, callbackContext);
                     break;
                 case "isConnected":
-                    this.isConnect(args, callbackContext);
+                    this.isConnected(args, callbackContext);
                     break;
                 case "getIPFS":
                     this.getIPFS(args, callbackContext);
@@ -194,12 +194,16 @@ HivePlugin extends TrinityPlugin {
 //        }
 //    }
 
-    private void isConnect(JSONArray args, CallbackContext callbackContext) throws JSONException {
+    private void isConnected(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        LogUtil.d("---------->111111111111111111");
         int clientId = args.getInt(0);
         Client client = hiveClientMap.get(clientId);
         boolean isConnect = client.isConnected();
         JSONObject ret = new JSONObject();
         ret.put("isConnect", isConnect);
+
+
+        LogUtil.d("---------->"+isConnect);
         callbackContext.success(ret);
     }
 
@@ -214,7 +218,9 @@ HivePlugin extends TrinityPlugin {
     private void getIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
         int clientId = args.getInt(0);
         Client client = hiveClientMap.get(clientId);
+
         IPFS ipfs = client.getIPFS();
+
         int ipfsObjId = System.identityHashCode(ipfs);
 
         ipfsMap.put(ipfsObjId,ipfs);
