@@ -170,6 +170,7 @@ var onedrive_commands = [
     { cmd: "getfiles",            fn: get_files,           help: "getfiles"},
     { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues"},
     { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
+    { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
 //    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
 //    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
 //    { cmd: "getbuffer",           fn: get_file_buffer,           help: "getbuffer destFileName encrypt"},
@@ -393,27 +394,52 @@ function get_keyvalues(argv) {
 
 
 function put_string_files(argv) {
-    if (argv.length != 3) {
-        display_others_msg("Invalid command syntax.");
-        return;
-    }
+     if (argv.length != 3) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
 
-    if(files==null){
-        display_others_msg("please getFiles first.");
-        return;
-    }
+     if(files==null){
+         display_others_msg("please getFiles first.");
+         return;
+     }
 
-    var remoteFile = argv[1];
-    var data = argv[2];
+     var remoteFile = argv[1];
+     var data = argv[2];
 
-    files.put(remoteFile,data).then(
-        function (ret) {
-            display_others_msg(ret.status);
-        },
-        function (error) {
-            display_others_msg("Create HiveFile error! " + error);
-        });
-}
+     files.put(remoteFile,data).then(
+         function (ret) {
+             display_others_msg(ret.status);
+         },
+         function (error) {
+             display_others_msg("Create HiveFile error! " + error);
+         });
+ }
+
+// function get_string_files(argv) {
+//     if (argv.length != 3) {
+//         display_others_msg("Invalid command syntax.");
+//         return;
+//     }
+//
+//     if(files==null){
+//         display_others_msg("please getFiles first.");
+//         return;
+//     }
+//
+//     var remoteFile = argv[1];
+//     var data = argv[2];
+//
+//     files.put(remoteFile,data).then(
+//         function (ret) {
+//             display_others_msg(ret.status);
+//         },
+//         function (error) {
+//             display_others_msg("Create HiveFile error! " + error);
+//         });
+// }
+
+
 //function put_hive_file(argv) {
 //    if (argv.length != 4) {
 //        display_others_msg("Invalid command syntax.");

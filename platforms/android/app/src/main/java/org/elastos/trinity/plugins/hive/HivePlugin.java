@@ -259,43 +259,73 @@ HivePlugin extends TrinityPlugin {
 
 
     private void putStringForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+//        int clientId = args.getInt(0);
+//        String remoteFile = args.getString(1);
+//        String data = args.getString(2);
+//
+//        Client client = hiveClientMap.get(clientId);
+//        client.getFiles().put(data, remoteFile, crateResultHandler(ResultHandler.Type.Void));
+
+        int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
         String data = args.getString(2);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getFiles().put(data, remoteFile, crateResultHandler(ResultHandler.Type.Void));
+        Files api = filesMap.get(filesId);
+        api.put(data, remoteFile, crateResultHandler(ResultHandler.Type.Void));
     }
 
     private void getAsStringForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+//        int clientId = args.getInt(0);
+//        String remoteFile = args.getString(1);
+//
+//        Client client = hiveClientMap.get(clientId);
+//        client.getFiles().getAsString(remoteFile, crateResultHandler(ResultHandler.Type.String));
+
+        int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getFiles().getAsString(remoteFile, crateResultHandler(ResultHandler.Type.String));
+        Files api = filesMap.get(filesId);
+        api.getAsString(remoteFile, crateResultHandler(ResultHandler.Type.String));
     }
 
     private void sizeForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getFiles().size(remoteFile, crateResultHandler(ResultHandler.Type.Length));
+        Files api = filesMap.get(filesId);
+        api.size(remoteFile, crateResultHandler(ResultHandler.Type.Length));
+
+//        int clientId = args.getInt(0);
+//        String remoteFile = args.getString(1);
+//
+//        Client client = hiveClientMap.get(clientId);
+//        client.getFiles().size(remoteFile, crateResultHandler(ResultHandler.Type.Length));
     }
 
     private void deleteForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getFiles().delete(remoteFile, crateResultHandler(ResultHandler.Type.Void));
+        Files api = filesMap.get(filesId);
+        api.delete(remoteFile, crateResultHandler(ResultHandler.Type.Void));
+
+//        int clientId = args.getInt(0);
+//        String remoteFile = args.getString(1);
+//
+//        Client client = hiveClientMap.get(clientId);
+//        client.getFiles().delete(remoteFile, crateResultHandler(ResultHandler.Type.Void));
     }
 
     private void listForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int filesId = args.getInt(0);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getFiles().list(crateResultHandler(ResultHandler.Type.FileList));
+        Files api = filesMap.get(filesId);
+        api.list(crateResultHandler(ResultHandler.Type.FileList));
+
+//        int clientId = args.getInt(0);
+//
+//        Client client = hiveClientMap.get(clientId);
+//        client.getFiles().list(crateResultHandler(ResultHandler.Type.FileList));
     }
 
     private void putStringIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -323,37 +353,38 @@ HivePlugin extends TrinityPlugin {
     }
 
     private void putValue(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int keyValuesId = args.getInt(0);
         String key = args.getString(1);
         String value = args.getString(2);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getKeyValues().putValue(key, value, crateResultHandler(ResultHandler.Type.Void));
+//        Client client = hiveClientMap.get(clientId);
+        KeyValues api = keyValuesMap.get(keyValuesId);
+        api.putValue(key, value, crateResultHandler(ResultHandler.Type.Void));
     }
 
     private void setValue(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int keyValuesId = args.getInt(0);
         String key = args.getString(1);
         String value = args.getString(2);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getKeyValues().setValue(key, value, crateResultHandler(ResultHandler.Type.Void));
+        KeyValues api = keyValuesMap.get(keyValuesId);
+        api.setValue(key, value, crateResultHandler(ResultHandler.Type.Void));
     }
 
     private void getValues(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int keyValuesId = args.getInt(0);
         String key = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getKeyValues().getValues(key, crateResultHandler(ResultHandler.Type.ValueList));
+        KeyValues api = keyValuesMap.get(keyValuesId);
+        api.getValues(key, crateResultHandler(ResultHandler.Type.ValueList));
     }
 
     private void deleteKey(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int keyValuesId = args.getInt(0);
         String key = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getKeyValues().deleteKey(key, crateResultHandler(ResultHandler.Type.Void));
+        KeyValues api = keyValuesMap.get(keyValuesId);
+        api.deleteKey(key, crateResultHandler(ResultHandler.Type.Void));
     }
 //    private void createConnection(JSONArray args, CallbackContext callbackContext) throws JSONException, HiveException {
 //        String dataDir = cordova.getActivity().getFilesDir() + "/data/hive/" + args.getString(0);

@@ -122,14 +122,14 @@ var IPFSImpl = /** @class */ (function () {
         this.objId = null;
         this.plugin = null;
     }
-    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
-        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
+    IPFSImpl.prototype.put = function (data) {
+        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , data]);
     };
-    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
-        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
+    IPFSImpl.prototype.get = function (cid) {
+        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid]);
     };
-    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
-        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
+    IPFSImpl.prototype.size = function (cid) {
+        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid]);
     };
     return IPFSImpl;
 }());
@@ -138,16 +138,22 @@ var FilesImpl = /** @class */ (function () {
         this.objId = null;
         this.plugin = null;
     }
-    FilesImpl.prototype.put = function (remoteFile,data,encrypt) {
+    FilesImpl.prototype.put = function (remoteFile,data) {
         return this.plugin.getPromise(this, 'putStringForFiles', [this.objId , remoteFile, data]);
     };
 
-//    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
-//    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
+    FilesImpl.prototype.getAsString = function (remoteFile) {
+        return this.plugin.getPromise(this, 'getAsStringForFiles', [this.objId , remoteFile]);
+    };
+    FilesImpl.prototype.size = function (remoteFile) {
+        return this.plugin.getPromise(this, 'sizeForFiles', [this.objId , remoteFile]);
+    };
+    FilesImpl.prototype.deleteFile = function (remoteFile) {
+        return this.plugin.getPromise(this, 'deleteForFiles', [this.objId , remoteFile]);
+    };
+    FilesImpl.prototype.list = function () {
+        return this.plugin.getPromise(this, 'listForFiles', [this.objId]);
+    };
     return FilesImpl;
 }());
 var KeyValuesImpl = /** @class */ (function () {
@@ -155,15 +161,18 @@ var KeyValuesImpl = /** @class */ (function () {
         this.objId = null;
         this.plugin = null;
     }
-//    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
-//    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
-//    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
-//        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
-//    };
+    KeyValuesImpl.prototype.putValue = function (key,value) {
+        return this.plugin.getPromise(this, 'putValue', [this.objId , key,value]);
+    };
+    KeyValuesImpl.prototype.setValue = function (key,value) {
+        return this.plugin.getPromise(this, 'setValue', [this.objId , key,value]);
+    };
+    KeyValuesImpl.prototype.getValues = function (key) {
+        return this.plugin.getPromise(this, 'getValues', [this.objId , key]);
+    };
+    KeyValuesImpl.prototype.deleteKey = function (key) {
+        return this.plugin.getPromise(this, 'deleteKey', [this.objId , key]);
+    };
     return KeyValuesImpl;
 }());
 
@@ -179,7 +188,7 @@ var ClientImpl = /** @class */ (function () {
         var me = this;
         var _onSuccess = function (ret) {
 //        ret.isConnect
-        alert(JSON.stringify(ret));
+//        alert(JSON.stringify(ret));
 //
 //            var file = new FileImpl();
 //            file.objId = ret.fileId;
@@ -188,7 +197,6 @@ var ClientImpl = /** @class */ (function () {
             if (onSuccess)
                 onSuccess(ret.isConnect);
         };
-        alert("call");
         alert(this.objId);
 //        alert("this.objId");
         exec(_onSuccess, onError, 'HivePlugin', 'isConnected', [this.objId]);
@@ -261,40 +269,40 @@ var ClientImpl = /** @class */ (function () {
 //    ClientImpl.prototype.putStringForFiles = function (remoteFile, data) {
 //        return this.plugin.getPromise(this, 'putStringForFiles', [this.objId, remoteFile, data]);
 //    };
-    ClientImpl.prototype.getAsStringForFiles = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'getAsStringForFiles', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.sizeForFiles = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'sizeForFiles', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.deleteForFiles = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'deleteForFiles', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.listForFiles = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'listForFiles', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.putStringIPFS = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.getAsStringIPFS = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.getSizeIPFS = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.putValue = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'putValue', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.setValue = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'setValue', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.getValues = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'getValues', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.deleteKey = function (remoteFile, data) {
-        return this.plugin.getPromise(this, 'deleteKey', [this.objId, remoteFile, data]);
-    };
-    ClientImpl.prototype.put
+//    ClientImpl.prototype.getAsStringForFiles = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'getAsStringForFiles', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.sizeForFiles = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'sizeForFiles', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.deleteForFiles = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'deleteForFiles', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.listForFiles = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'listForFiles', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.putStringIPFS = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.getAsStringIPFS = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.getSizeIPFS = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.putValue = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'putValue', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.setValue = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'setValue', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.getValues = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'getValues', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.deleteKey = function (remoteFile, data) {
+//        return this.plugin.getPromise(this, 'deleteKey', [this.objId, remoteFile, data]);
+//    };
+//    ClientImpl.prototype.put
     return ClientImpl;
 }());
 
