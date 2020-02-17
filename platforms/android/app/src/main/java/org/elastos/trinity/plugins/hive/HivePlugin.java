@@ -247,7 +247,7 @@ HivePlugin extends TrinityPlugin {
         keyValuesMap.put(keyValuesObjId,keyValues);
 
         JSONObject ret = new JSONObject();
-        ret.put("keyvaluesId", keyValuesObjId);
+        ret.put("keyValuesId", keyValuesObjId);
         callbackContext.success(ret);
     }
 
@@ -293,27 +293,27 @@ HivePlugin extends TrinityPlugin {
     }
 
     private void putStringIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int ipfsId = args.getInt(0);
         String data = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getIPFS().put(data, crateResultHandler(ResultHandler.Type.CID));
+        IPFS api = ipfsMap.get(ipfsId);
+        api.put(data, crateResultHandler(ResultHandler.Type.CID));
     }
 
     private void getAsStringIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int ipfsId = args.getInt(0);
         String cid = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getIPFS().getAsString(cid, crateResultHandler(ResultHandler.Type.String));
+        IPFS api = ipfsMap.get(ipfsId);
+        api.getAsString(cid, crateResultHandler(ResultHandler.Type.String));
     }
 
     private void getSizeIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        int clientId = args.getInt(0);
+        int ipfsId = args.getInt(0);
         String cid = args.getString(1);
 
-        Client client = hiveClientMap.get(clientId);
-        client.getIPFS().size(cid, crateResultHandler(ResultHandler.Type.Length));
+        IPFS api = ipfsMap.get(ipfsId);
+        api.size(cid, crateResultHandler(ResultHandler.Type.Length));
     }
 
     private void putValue(JSONArray args, CallbackContext callbackContext) throws JSONException {

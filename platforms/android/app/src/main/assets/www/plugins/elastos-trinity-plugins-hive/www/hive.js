@@ -117,15 +117,61 @@ var exec = cordova.exec;
 //    return ConnectionImpl;
 //}());
 
-
-
+var IPFSImpl = /** @class */ (function () {
+    function IPFSImpl() {
+        this.objId = null;
+        this.plugin = null;
+    }
+    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
+        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
+    };
+    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
+        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
+    };
+    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
+        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
+    };
+    return IPFSImpl;
+}());
+var FilesImpl = /** @class */ (function () {
+    function FilesImpl() {
+        this.objId = null;
+        this.plugin = null;
+    }
+//    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+//    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+//    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+    return FilesImpl;
+}());
+var KeyValuesImpl = /** @class */ (function () {
+    function KeyValuesImpl() {
+        this.objId = null;
+        this.plugin = null;
+    }
+//    IPFSImpl.prototype.put = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'putStringIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+//    IPFSImpl.prototype.get = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'getAsStringIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+//    IPFSImpl.prototype.size = function (cid,storePath,encrypt) {
+//        return this.plugin.getPromise(this, 'getSizeIPFS', [this.objId , cid,storePath,encrypt]);
+//    };
+    return KeyValuesImpl;
+}());
 
 var ClientImpl = /** @class */ (function () {
     function ClientImpl() {
         this.objId = null;
         this.plugin = null;
     }
-    ClientImpl.prototype.isConnect = function (filePath , onSuccess, onError) {
+    ClientImpl.prototype.isConnect = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
         alert(JSON.stringify(ret));
@@ -137,9 +183,9 @@ var ClientImpl = /** @class */ (function () {
 //            if (onSuccess)
 //                onSuccess(file);
         };
-        exec(_onSuccess, onError, 'HivePlugin', 'isConnect', [this.objId , filePath]);
+        exec(_onSuccess, onError, 'HivePlugin', 'isConnect', [this.objId]);
     };
-    ClientImpl.prototype.disConnect = function (filePath , onSuccess, onError) {
+    ClientImpl.prototype.disConnect = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
 //            var file = new FileImpl();
@@ -148,19 +194,20 @@ var ClientImpl = /** @class */ (function () {
 //            me.files[file.objId] = file;
 //            if (onSuccess)
 //                onSuccess(file);
+        alert(JSON.stringify(ret));
         };
-        exec(_onSuccess, onError, 'HivePlugin', 'disConnect', [this.objId , filePath]);
+        exec(_onSuccess, onError, 'HivePlugin', 'disConnect', [this.objId]);
     };
 
     ClientImpl.prototype.getIPFS = function (filePath , onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
-//            var file = new FileImpl();
-//            file.objId = ret.fileId;
-//            file.plugin = me.plugin;
-//            me.files[file.objId] = file;
-//            if (onSuccess)
-//                onSuccess(file);
+            var ipfs = new IPFSImpl();
+            ipfs.objId = ret.ipfsId;
+            ipfs.plugin = me.plugin;
+            me.ipfs[ipfs.objId] = ipfs;
+            if (onSuccess)
+                onSuccess(ipfs);
         };
         exec(_onSuccess, onError, 'HivePlugin', 'getIPFS', [this.objId , filePath]);
     };
@@ -168,6 +215,12 @@ var ClientImpl = /** @class */ (function () {
     ClientImpl.prototype.getFiles = function (filePath , onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
+            var files = new FilesImpl();
+            files.objId = ret.filesId;
+            files.plugin = me.plugin;
+            me.files[files.objId] = files;
+            if (onSuccess)
+                onSuccess(files);
 //            var file = new FileImpl();
 //            file.objId = ret.fileId;
 //            file.plugin = me.plugin;
@@ -181,6 +234,12 @@ var ClientImpl = /** @class */ (function () {
     ClientImpl.prototype.getKeyValues = function (filePath , onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
+            var keyValues = new KeyValuesImpl();
+            keyValues.objId = ret.keyValuesId;
+            keyValues.plugin = me.plugin;
+            me.keyValues[keyValues.objId] = keyValues;
+            if (onSuccess)
+                onSuccess(keyValues);
 //            var file = new FileImpl();
 //            file.objId = ret.fileId;
 //            file.plugin = me.plugin;
@@ -251,8 +310,8 @@ var OneDriveClientCreationOptions = /** @class */ (function () {
 var HiveManagerImpl = /** @class */ (function () {
     function HiveManagerImpl() {
         var _this = this;
-//        this.connection = [];
         this.client = [];
+        this.ipfs = [];
         this.resultIndex = 0;
         this.resultEvent = [];
         this.loginCount = 0;
@@ -268,7 +327,10 @@ var HiveManagerImpl = /** @class */ (function () {
         };
         Object.freeze(HiveManagerImpl.prototype);
         Object.freeze(ClientImpl.prototype);
-//        Object.freeze(FileImpl.prototype);
+        Object.freeze(IPFSImpl.prototype);
+        Object.freeze(FilesImpl.prototype);
+        Object.freeze(KeyValuesImpl.prototype);
+
 
         this.setListener(LISTENER_LOGIN, function (event) {
             var id = event.id;
@@ -340,7 +402,6 @@ var HiveManagerImpl = /** @class */ (function () {
         var configStr = JSON.stringify(options);
         var handlerId = this.addLoginRequestCb(handler);
 
-        alert("aaaa");
         exec(_onSuccess, onError, 'HivePlugin', 'createClient', [configStr, handlerId]);
     };
 //   HiveManagerImpl.prototype.createConnection = function (handler, options, onSuccess, onError) {

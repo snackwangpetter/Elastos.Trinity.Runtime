@@ -97,36 +97,22 @@ function create_onedrive_client() {
 //                                });
 
     var success = function (ret) {
-        alert("ssss");
         do_onedrive_command("help");
         client = ret ;
         display_others_msg("created onedrive client successfully");
-                alert("111");
 
         $("input").focus();
-        alert("222");
-            $('input').unbind('keypress');
+        $('input').unbind('keypress');
 
-        alert("333");
         $("input").bind('keypress', function (event) {
-        alert("---");
-
             if (event.keyCode == "13") {
-            alert("444");
-
                 var content = $('input').val()
                 if (content.trim() != "") {
-                alert("555");
-
                     display_me_msg($('input').val());
                     do_onedrive_command($('input').val());
                     $('input').val('');
-                                alert("ffff");
-
                 }
             }
-                        alert("ggggggg");
-
         });
     }
 
@@ -179,8 +165,11 @@ function create_ipfs_client() {
 var onedrive_commands = [
     { cmd: "help",      fn: help_onedrive,                   help: "help [cmd]"  },
     { cmd: "version",   fn: get_version,            help: "version"     },
-//    { cmd: "create",            fn: create_hive_file,           help: "create [filepath]"},
-    { cmd: "putstring",           fn: put_string_files,           help: "putstring remoteFile data"},
+    { cmd: "isconnect",            fn: show_connect_status,           help: "isconnect"},
+    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs [client]"},
+    { cmd: "getfiles",            fn: get_files,           help: "getfiles [client]"},
+    { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues [client]"},
+    { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
 //    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
 //    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
 //    { cmd: "getbuffer",           fn: get_file_buffer,           help: "getbuffer destFileName encrypt"},
@@ -210,19 +199,19 @@ var onedrive_commands = [
 //}
 //
 function do_onedrive_command(input) {
-    var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
-    if (!args || args[0] == "") {
-        return;
-    }
-    args[0] = args[0].toLowerCase()
-    for (var i = 0; i < onedrive_commands.length; i++) {
-        if (onedrive_commands[i].cmd == args[0]) {
-            onedrive_commands[i].fn(args);
-            return;
-        }
-    }
-    display_others_msg("Unknown command:" + args[0]);
-}
+     var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
+     if (!args || args[0] == "") {
+         return;
+     }
+     args[0] = args[0].toLowerCase()
+     for (var i = 0; i < onedrive_commands.length; i++) {
+         if (onedrive_commands[i].cmd == args[0]) {
+             onedrive_commands[i].fn(args);
+             return;
+         }
+     }
+     display_others_msg("Unknown command:" + args[0]);
+ }
 
 function help_onedrive(args) {
     if (args.length > 1) {
@@ -333,6 +322,21 @@ function get_string_files(argv) {
         },
         function (error) {
             display_others_msg("Create HiveFile error! " + error);
+        });
+}
+
+function show_connect_status(argv) {
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    client.isConnect().then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("show connect status error! " + error);
         });
 }
 //function put_hive_file(argv) {
