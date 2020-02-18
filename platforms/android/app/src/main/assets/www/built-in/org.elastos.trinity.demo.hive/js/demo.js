@@ -166,11 +166,25 @@ var onedrive_commands = [
     { cmd: "help",      fn: help_onedrive,                   help: "help [cmd]"  },
     { cmd: "version",   fn: get_version,            help: "version"     },
     { cmd: "isconnected",            fn: show_connect_status,           help: "isconnected"},
+
     { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs"},
     { cmd: "getfiles",            fn: get_files,           help: "getfiles"},
     { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues"},
-    { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
-    { cmd: "putstring",           fn: put_string_files,           help: "putstring [remoteFile] [data]"},
+
+    { cmd: "put",           fn: put_string_files,           help: "put [remoteFile] [data]"},
+    { cmd: "get",           fn: get_string_files,           help: "get [remoteFile]"},
+    { cmd: "size",           fn: get_size_files,           help: "size [remoteFile]"},
+    { cmd: "delete",           fn: delete_file_files,           help: "delete [remoteFile]"},
+    { cmd: "list",           fn: list_files,           help: "list"},
+
+    { cmd: "putvalue",           fn: put_value,           help: "putvalue [key] [value]"},
+    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
+    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
+    { cmd: "deletekey",           fn: delete_key,           help: "deletekey [key]"},
+
+    { cmd: "putipfs",           fn: put_string_ipfs,           help: "putipfs [key] [value]"},
+    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
+    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
 //    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
 //    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
 //    { cmd: "getbuffer",           fn: get_file_buffer,           help: "getbuffer destFileName encrypt"},
@@ -346,21 +360,6 @@ function get_ipfs(argv) {
 }
 
 function get_files(argv) {
-//      if (argv.length != 1) {
-//          display_others_msg("Invalid command syntax.");
-//          return;
-//      }
-//
-//      client.getFiles(
-//          function (ret) {
-// //             display_others_msg(ret.status);
-//          files = ret;
-//          display_others_msg("success");
-//          },
-//          function (error) {
-//              display_others_msg("show connect status error! " + error);
-//          }));
-
      if (argv.length != 1) {
          display_others_msg("Invalid command syntax.");
          return;
@@ -400,7 +399,7 @@ function put_string_files(argv) {
      }
 
      if(files==null){
-         display_others_msg("please getFiles first.");
+         display_others_msg("Please getFiles first.");
          return;
      }
 
@@ -412,33 +411,187 @@ function put_string_files(argv) {
              display_others_msg(ret.status);
          },
          function (error) {
-             display_others_msg("Create HiveFile error! " + error);
+             display_others_msg("Put string error! " + error);
          });
  }
 
-// function get_string_files(argv) {
-//     if (argv.length != 3) {
-//         display_others_msg("Invalid command syntax.");
-//         return;
-//     }
-//
-//     if(files==null){
-//         display_others_msg("please getFiles first.");
-//         return;
-//     }
-//
-//     var remoteFile = argv[1];
-//     var data = argv[2];
-//
-//     files.put(remoteFile,data).then(
-//         function (ret) {
-//             display_others_msg(ret.status);
-//         },
-//         function (error) {
-//             display_others_msg("Create HiveFile error! " + error);
-//         });
-// }
+ function get_string_files(argv) {
+     if (argv.length != 2) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
 
+     if(files==null){
+         display_others_msg("Please getFiles first.");
+         return;
+     }
+
+     var remoteFile = argv[1];
+
+     files.getAsString(remoteFile).then(
+         function (ret) {
+             display_others_msg(ret.status);
+             display_others_msg("content is "+ret.content);
+         },
+         function (error) {
+             display_others_msg("Get string error! " + error);
+         });
+ }
+
+ function get_size_files(argv) {
+     if (argv.length != 2) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+
+     if(files==null){
+         display_others_msg("Please getFiles first.");
+         return;
+     }
+
+     var remoteFile = argv[1];
+
+     files.size(remoteFile).then(
+         function (ret) {
+             display_others_msg(ret.status);
+             display_others_msg("Length is "+ret.length);
+         },
+         function (error) {
+             display_others_msg("Get size error! " + error);
+         });
+ }
+
+ function delete_file_files(argv) {
+     if (argv.length != 2) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+
+     if(files==null){
+         display_others_msg("Please getFiles first.");
+         return;
+     }
+
+     var remoteFile = argv[1];
+
+     files.deleteFile(remoteFile).then(
+         function (ret) {
+             display_others_msg(ret.status);
+         },
+         function (error) {
+             display_others_msg("Delete file error! " + error);
+         });
+ }
+
+ function list_files(argv) {
+      if (argv.length != 1) {
+          display_others_msg("Invalid command syntax.");
+          return;
+      }
+
+      if(files==null){
+          display_others_msg("Please getFiles first.");
+          return;
+      }
+
+      files.list(remoteFile).then(
+          function (ret) {
+              display_others_msg(JSON.stringify(ret));
+          },
+          function (error) {
+              display_others_msg("Delete file error! " + error);
+          });
+  }
+
+function put_value(argv) {
+    if (argv.length != 3) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(keyvalues==null){
+        display_others_msg("Please getKeyValues first.");
+        return;
+    }
+
+    var key = argv[1];
+    var value = argv[2];
+
+    keyvalues.putValue(key,value).then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("Put value error! " + error);
+        });
+}
+
+function set_value(argv) {
+     if (argv.length != 3) {
+         display_others_msg("Invalid command syntax.");
+         return;
+     }
+
+     if(keyvalues==null){
+         display_others_msg("Please getKeyValues first.");
+         return;
+     }
+
+     var key = argv[1];
+     var value = argv[2];
+
+     keyvalues.setValue(key,value).then(
+         function (ret) {
+             display_others_msg(ret.status);
+         },
+         function (error) {
+             display_others_msg("Set value error! " + error);
+         });
+ }
+
+function get_values(argv) {
+    if (argv.length != 3) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(keyvalues==null){
+        display_others_msg("Please getKeyValues first.");
+        return;
+    }
+
+    var key = argv[1];
+
+    keyvalues.getValues(key).then(
+        function (ret) {
+            display_others_msg(JSON.stringify(ret));
+        },
+        function (error) {
+            display_others_msg("Get values error! " + error);
+        });
+}
+
+function delete_key(argv) {
+    if (argv.length != 3) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(keyvalues==null){
+        display_others_msg("Please getKeyValues first.");
+        return;
+    }
+
+    var key = argv[1];
+
+    keyvalues.deleteKey(key).then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("Get values error! " + error);
+        });
+}
 
 //function put_hive_file(argv) {
 //    if (argv.length != 4) {

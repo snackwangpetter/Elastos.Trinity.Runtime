@@ -285,7 +285,7 @@ HivePlugin extends TrinityPlugin {
         String remoteFile = args.getString(1);
 
         Files api = filesMap.get(filesId);
-        api.getAsString(remoteFile, crateResultHandler(ResultHandler.Type.String));
+        api.getAsString(remoteFile, crateResultHandler(ResultHandler.Type.Content));
     }
 
     private void sizeForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -341,7 +341,7 @@ HivePlugin extends TrinityPlugin {
         String cid = args.getString(1);
 
         IPFS api = ipfsMap.get(ipfsId);
-        api.getAsString(cid, crateResultHandler(ResultHandler.Type.String));
+        api.getAsString(cid, crateResultHandler(ResultHandler.Type.Content));
     }
 
     private void getSizeIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {

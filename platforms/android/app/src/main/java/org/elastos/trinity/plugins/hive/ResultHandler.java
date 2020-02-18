@@ -26,10 +26,13 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.elastos.hive.exception.HiveException;
 import org.elastos.hive.utils.LogUtil;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.elastos.hive.*;
+
+import java.util.ArrayList;
 
 class ResultHandler<T> implements Callback<T> {
     private final Type type;
@@ -54,9 +57,7 @@ class ResultHandler<T> implements Callback<T> {
     @Override
     public void onError(HiveException ex) {
         try {
-            JSONObject ret = new JSONObject();
-            ret.put("error", ex.getMessage());
-            sendEvent(ret);
+            sendEvent(errorJson(ex.getMessage()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,104 +67,94 @@ class ResultHandler<T> implements Callback<T> {
     public void onSuccess(T result) {
         JSONObject ret = null;
 
-//        LogUtil.d("body = " + result.toString());
-
         try {
-//            if (body instanceof Void) {
-//                ret = voidToJson();
-//            } else if (body instanceof Length){
-//                ret = lengthToJson((Length) body);
-//            } else if (body instanceof Data){
-//                ret = dataToJson((Data) body);
-//            } else if (body instanceof FileList){
-//                ret = fileListToJson((FileList) body);
-//            } else if (body instanceof ValueList){
-//                ret = valueListToJson((ValueList) body);
-//            } else if (body instanceof CID){
-//                ret = cidToJson((CID) body);
-//            }
-
             switch (type) {
                 case Void:
                     ret = voidToJson();
                     break;
                 case Length:
+                    ret = lengthToJson((Long) result);
                     break;
-                case String:
+                case Content:
+                    ret = contentToJson((String) result);
                     break;
                 case FileList:
+                    ret = fileListToJson((ArrayList<String>) result);
                     break;
                 case ValueList:
+                    ret = valueListToJson((ArrayList<byte[]>) result);
+                    break;
+                case CID:
+                    ret = cidToJSON((String) result);
                     break;
                 default:
                     break;
             }
-            if (ret == null) {
-                ret = new JSONObject();
-                ret.put("error", "ret is null");
-            }
+            if (ret == null)
+                ret = errorJson("ret is null");
+
             sendEvent(ret);
         } catch (JSONException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 
-
-//    private JSONObject cidToJson(CID cid) throws JSONException{
-//        JSONObject json = new JSONObject();
-//        json.put("cid",cid.getCid());
-//
-//        return json ;
-//    }
-//
-//    private JSONObject valueListToJson(ValueList valueList) throws JSONException{
-//        ArrayList<Data> list = valueList.getList();
-//        JSONObject json = new JSONObject();
-//        JSONArray array = new JSONArray();
-//        for (Data data :list){
-//            array.put(new String(data.getData()));
-//        }
-//        json.put("values",array);
-//
-//        return json ;
-//    }
-//
-//    private JSONObject fileListToJson(FileList filelist) throws JSONException{
-//        String[] files = filelist.getList() ;
-//        JSONObject json = new JSONObject();
-//        JSONArray array = new JSONArray();
-//        for (String filePath : files){
-//            array.put(filePath);
-//        }
-//        json.put("files",array);
-//
-//        return json ;
-//    }
-//
-//    private JSONObject dataToJson(Data data) throws JSONException{
-//        JSONObject json = new JSONObject();
-//        json.put("data", new String(data.getData()));
-//
-//        return json;
-//    }
-//
-    private JSONObject lengthToJson(long length) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("length", length);
-
-        return json;
+    private JSONObject voidToJson() throws JSONException {
+        JSONObject ret = successJson();
+        return ret;
     }
 
-    private JSONObject voidToJson() throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("status", "Success!");
-        return json;
+    private JSONObject lengthToJson(long length) throws JSONException {
+        JSONObject ret = successJson();
+        ret.put("length", length);
+        return ret;
+    }
+
+    private JSONObject contentToJson(String content) throws JSONException {
+        JSONObject ret = successJson();
+        ret.put("content", content);
+        return ret;
+    }
+
+    private JSONObject fileListToJson(ArrayList<String> fileList) throws JSONException {
+        JSONObject ret = successJson();
+        JSONArray array = new JSONArray(fileList);
+        ret.put("fileList", array);
+        return ret;
+    }
+
+    private JSONObject valueListToJson(ArrayList<byte[]> valueList) throws JSONException {
+        JSONObject ret = successJson();
+        JSONArray array = new JSONArray();
+        for (byte[] value :valueList){
+            array.put(new String(value));
+        }
+        ret.put("fileList", array);
+        return ret;
+    }
+    private JSONObject cidToJSON(String cid) throws JSONException {
+        JSONObject ret = successJson();
+        ret.put("cid", cid);
+        return ret;
+    }
+    private JSONObject successJson() throws JSONException {
+        JSONObject ret = new JSONObject();
+        ret.put("status", "success");
+        return ret;
+    }
+
+    private JSONObject errorJson(String errorMsg) throws JSONException {
+        JSONObject ret = new JSONObject();
+        ret.put("status", "error");
+        ret.put("error", errorMsg);
+        return ret;
+
     }
 
     enum Type {
         Void,
         Length,
-        String,
+        Content,
         CID,
         FileList,
         ValueList
