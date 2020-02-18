@@ -129,7 +129,7 @@ class ResultHandler<T> implements Callback<T> {
         for (byte[] value :valueList){
             array.put(new String(value));
         }
-        ret.put("fileList", array);
+        ret.put("valueList", array);
         return ret;
     }
     private JSONObject cidToJSON(String cid) throws JSONException {

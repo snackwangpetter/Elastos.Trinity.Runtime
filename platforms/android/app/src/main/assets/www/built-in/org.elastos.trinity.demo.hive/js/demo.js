@@ -182,9 +182,9 @@ var onedrive_commands = [
     { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
     { cmd: "deletekey",           fn: delete_key,           help: "deletekey [key]"},
 
-    { cmd: "putipfs",           fn: put_string_ipfs,           help: "putipfs [key] [value]"},
-    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
-    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
+//    { cmd: "putipfs",           fn: put_string_ipfs,           help: "putipfs [key] [value]"},
+//    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
+//    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
 //    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
 //    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
 //    { cmd: "getbuffer",           fn: get_file_buffer,           help: "getbuffer destFileName encrypt"},
@@ -494,9 +494,10 @@ function put_string_files(argv) {
           return;
       }
 
-      files.list(remoteFile).then(
+      files.list().then(
           function (ret) {
-              display_others_msg(JSON.stringify(ret));
+//              display_others_msg(JSON.stringify(ret));
+              display_others_msg(ret.fileList);
           },
           function (error) {
               display_others_msg("Delete file error! " + error);
@@ -550,7 +551,7 @@ function set_value(argv) {
  }
 
 function get_values(argv) {
-    if (argv.length != 3) {
+    if (argv.length != 2) {
         display_others_msg("Invalid command syntax.");
         return;
     }
@@ -564,7 +565,8 @@ function get_values(argv) {
 
     keyvalues.getValues(key).then(
         function (ret) {
-            display_others_msg(JSON.stringify(ret));
+//            display_others_msg(JSON.stringify(ret));
+            display_others_msg(ret.valueList);
         },
         function (error) {
             display_others_msg("Get values error! " + error);
@@ -572,7 +574,7 @@ function get_values(argv) {
 }
 
 function delete_key(argv) {
-    if (argv.length != 3) {
+    if (argv.length != 2) {
         display_others_msg("Invalid command syntax.");
         return;
     }
