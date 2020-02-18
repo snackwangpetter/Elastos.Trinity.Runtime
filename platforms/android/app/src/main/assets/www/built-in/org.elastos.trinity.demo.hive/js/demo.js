@@ -65,36 +65,6 @@ function do_client_command(input) {
 
 function create_onedrive_client() {
     $('input').unbind('keypress');
-//
-//alert("ssss");
-//        do_onedrive_command("help");
-//        display_others_msg("created onedrive client successfully");
-//                alert("111");
-//
-//        $("input").focus();
-//        alert("222");
-////            $('input').unbind('keypress');
-//
-//        alert("333");
-//        $("input").bind('keypress', function (event) {
-//        alert("---");
-//
-//            if (event.keyCode == "13") {
-//            alert("444");
-//
-//                var content = $('input').val()
-//                if (content.trim() != "") {
-//                alert("555");
-//
-//                    display_me_msg($('input').val());
-//                    do_onedrive_command($('input').val());
-//                    $('input').val('');
-//                                alert("ffff");
-//
-//                }
-//            }
-//                        alert("ggggggg");
-//                                });
 
     var success = function (ret) {
         do_onedrive_command("help");
@@ -102,8 +72,6 @@ function create_onedrive_client() {
         display_others_msg("created onedrive client successfully");
 
         $("input").focus();
-        $('input').unbind('keypress');
-
         $("input").bind('keypress', function (event) {
             if (event.keyCode == "13") {
                 var content = $('input').val()
@@ -122,52 +90,47 @@ function create_onedrive_client() {
         }, onedrive_opts,success, null);
 }
 
-
-
-
-
-
 function create_ipfs_client() {
-//    $('input').unbind('keypress')
-//
-//    var success = function (ret) {
-//        do_ipfs_command("help");
-//        connection = ret ;
-//        display_others_msg("created ipfs client successfully");
-//
-//        $("input").focus();
-//        $("input").bind('keypress', function (event) {
-//            if (event.keyCode == "13") {
-//                var content = $('input').val()
-//                if (content.trim() != "") {
-//                    display_me_msg($('input').val());
-//                    do_ipfs_command($('input').val());
-//                    $('input').val('');
-//                }
-//            }
-//        });
-//    }
-//
-////    hiveManager.createConnection(null,ipfs_opts, success, null);
+    $('input').unbind('keypress')
+
+    var success = function (ret) {
+        do_ipfs_command("help");
+        client = ret ;
+        display_others_msg("created ipfs client successfully");
+
+        $("input").focus();
+        $("input").bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                var content = $('input').val()
+                if (content.trim() != "") {
+                    display_me_msg($('input').val());
+                    do_ipfs_command($('input').val());
+                    $('input').val('');
+                }
+            }
+        });
+    }
+
+    hiveManager.createClient(null,ipfs_opts, success, null);
 }
-//
-//var ipfs_commands = [
-//    { cmd: "help",      fn: help_ipfs,                   help: "help [cmd]"  },
-//    { cmd: "version",   fn: get_version,            help: "version"     },
-////    { cmd: "create",            fn: create_hive_file,           help: "create [filepath]"},
-////    { cmd: "putipfsfile",       fn: put_ipfs_file,           help: "putipfsfile sourceFilePath encrypt"},
-////    { cmd: "putipfsbuffer",       fn: put_ipfs_buffer,           help: "putipfsbuffer sourceString encrypt"},
-////    { cmd: "getipfsfilelength",       fn: get_ipfs_file_length,           help: "getipfsfilelength cid"},
-////    { cmd: "getipfsbuffer",       fn: get_ipfs_buffer,           help: "getipfsbuffer cid encrypt"},
-////    { cmd: "getipfsfile",       fn: get_ipfs_file,           help: "getipfsfile cid storePath encrypt"},
-////    { cmd: "exit",      fn: exit,                   help: "exit"        }
-////]
+
+var ipfs_commands = [
+    { cmd: "help",      fn: help_ipfs,                   help: "help [cmd]"  },
+    { cmd: "version",   fn: get_version,            help: "version"     },
+
+    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs"},
+
+    { cmd: "put",           fn: put_string_ipfs,           help: "put [data]"},
+    { cmd: "get",           fn: get_string_ipfs,           help: "get [cid]"},
+    { cmd: "size",           fn: get_size_ipfs,           help: "size [cid]"},
+]
+
+
 var onedrive_commands = [
     { cmd: "help",      fn: help_onedrive,                   help: "help [cmd]"  },
     { cmd: "version",   fn: get_version,            help: "version"     },
     { cmd: "isconnected",            fn: show_connect_status,           help: "isconnected"},
 
-    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs"},
     { cmd: "getfiles",            fn: get_files,           help: "getfiles"},
     { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues"},
 
@@ -181,38 +144,23 @@ var onedrive_commands = [
     { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
     { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
     { cmd: "deletekey",           fn: delete_key,           help: "deletekey [key]"},
-
-//    { cmd: "putipfs",           fn: put_string_ipfs,           help: "putipfs [key] [value]"},
-//    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
-//    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
-//    { cmd: "putbuffer",         fn: put_hive_file_from_buffer,           help: "putbuffer destFileName sourceString encrypt"},
-//    { cmd: "getfilelength",     fn: get_file_length,           help: "getfilelength destFileName"},
-//    { cmd: "getbuffer",           fn: get_file_buffer,           help: "getbuffer destFileName encrypt"},
-//    { cmd: "getfile",           fn: get_file,           help: "getfile destFileName storePath encrypt"},
-//    { cmd: "deletefile",        fn: delete_file,           help: "deletefile destFileName"},
-//    { cmd: "listfile",          fn: list_file,           help: "listfile"},
-//    { cmd: "putvalue",          fn: put_value,           help: "putvalue key valueStr encrypt"},
-//    { cmd: "setvalue",          fn: set_value,           help: "setvalue key valueStr encrypt"},
-//    { cmd: "getvalue",          fn: get_value,           help: "getvalue key encrypt"},
-//    { cmd: "deletevalue",       fn: delete_value,           help: "deletevalue key"},
-//    { cmd: "exit",      fn: exit,                   help: "exit"        }
 ]
-//
-//function do_ipfs_command(input) {
-//    var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
-//    if (!args || args[0] == "") {
-//        return;
-//    }
-//    args[0] = args[0].toLowerCase()
-//    for (var i = 0; i < ipfs_commands.length; i++) {
-//        if (ipfs_commands[i].cmd == args[0]) {
-//            ipfs_commands[i].fn(args);
-//            return;
-//        }
-//    }
-//    display_others_msg("Unknown command:" + args[0]);
-//}
-//
+
+function do_ipfs_command(input) {
+    var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
+    if (!args || args[0] == "") {
+        return;
+    }
+    args[0] = args[0].toLowerCase()
+    for (var i = 0; i < ipfs_commands.length; i++) {
+        if (ipfs_commands[i].cmd == args[0]) {
+            ipfs_commands[i].fn(args);
+            return;
+        }
+    }
+    display_others_msg("Unknown command:" + args[0]);
+}
+
 function do_onedrive_command(input) {
      var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
      if (!args || args[0] == "") {
@@ -246,25 +194,25 @@ function help_onedrive(args) {
         display_others_msg(msg);
     }
 }
-//
-//function help_ipfs(args) {
-//    if (args.length > 1) {
-//        for (var i = 0; i < ipfs_commands.length; i++) {
-//            if (ipfs_commands[i].cmd == args[1]) {
-//                display_others_msg("Usage: :" + ipfs_commands[i].help);
-//                return;
-//            }
-//        }
-//        display_others_msg("Usage: :" + ipfs_commands[0].help);
-//    }
-//    else {
-//        var msg = "Available commands list: </br>"
-//        for (var i = 0; i < ipfs_commands.length; i++) {
-//            msg += "&nbsp;&nbsp;" + ipfs_commands[i].help + "</br>";
-//        }
-//        display_others_msg(msg);
-//    }
-//}
+
+function help_ipfs(args) {
+    if (args.length > 1) {
+        for (var i = 0; i < ipfs_commands.length; i++) {
+            if (ipfs_commands[i].cmd == args[1]) {
+                display_others_msg("Usage: :" + ipfs_commands[i].help);
+                return;
+            }
+        }
+        display_others_msg("Usage: :" + ipfs_commands[0].help);
+    }
+    else {
+        var msg = "Available commands list: </br>"
+        for (var i = 0; i < ipfs_commands.length; i++) {
+            msg += "&nbsp;&nbsp;" + ipfs_commands[i].help + "</br>";
+        }
+        display_others_msg(msg);
+    }
+}
 
 function exit(args) {
     appManager.close();
@@ -281,52 +229,6 @@ function get_version(args) {
     );
 }
 
-//function create_hive_file(argv) {
-//    if (argv.length > 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var filePath ="/";
-//
-//    if (argv.length == 2){
-//        filePath = argv[1];
-//    }
-//
-//    connection.createHiveFile(
-//        filePath,
-//        function (file) {
-//            hivefile = file;
-//            display_others_msg("file objID = "+hivefile.objId);
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        }
-//    );
-//}
-//
-
-
-
-
-
-//function get_string_files(argv) {
-//    if (argv.length != 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//
-//    client.getFileLength(destFileName).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-
 function show_connect_status(argv) {
      if (argv.length != 1) {
          display_others_msg("Invalid command syntax.");
@@ -342,21 +244,18 @@ var client;
 var ipfs;
 var files;
 var keyvalues;
-function get_ipfs(argv) {
-     if (argv.length != 2) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
 
-     client.getIPFS().then(
-         function (ret) {
-//             display_others_msg(ret.status);
+function get_ipfs(argv) {
+     if (argv.length != 1) {
+          display_others_msg("Invalid command syntax.");
+          return;
+      }
+     var success = function (ret) {
          ipfs = ret;
          display_others_msg("success");
-         },
-         function (error) {
-             display_others_msg("show connect status error! " + error);
-         });
+     }
+
+      client.getIPFS(success,null);
 }
 
 function get_files(argv) {
@@ -373,11 +272,6 @@ function get_files(argv) {
 }
 
 function get_keyvalues(argv) {
-      if (argv.length != 1) {
-          display_others_msg("Invalid command syntax.");
-          return;
-      }
-
      if (argv.length != 1) {
          display_others_msg("Invalid command syntax.");
          return;
@@ -496,7 +390,6 @@ function put_string_files(argv) {
 
       files.list().then(
           function (ret) {
-//              display_others_msg(JSON.stringify(ret));
               display_others_msg(ret.fileList);
           },
           function (error) {
@@ -565,7 +458,7 @@ function get_values(argv) {
 
     keyvalues.getValues(key).then(
         function (ret) {
-//            display_others_msg(JSON.stringify(ret));
+            display_others_msg(ret.status);
             display_others_msg(ret.valueList);
         },
         function (error) {
@@ -595,278 +488,73 @@ function delete_key(argv) {
         });
 }
 
-//function put_hive_file(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//    var storePath = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.putFile(destFileName,storePath,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//
-//function put_hive_file_from_buffer(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//    var sourceString = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.putFileFromBuffer(destFileName,sourceString,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_file_length(argv) {
-//    if (argv.length != 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//
-//    hivefile.getFileLength(destFileName).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_file_buffer(argv) {
-//    if (argv.length != 3) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//    var encrypt = argv[2];
-//
-//    hivefile.getFileToBuffer(destFileName,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_file(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var destFileName = argv[1];
-//    var storePath = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.getFile(destFileName,storePath,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function delete_file(argv) {
-//    if (argv.length != 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//    var destFileName = argv[1];
-//
-//    hivefile.deleteFile(destFileName).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function list_file() {
-//    hivefile.listFile().then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function put_value(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var key = argv[1];
-//    var valueStr = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.putValue(key,valueStr,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function set_value(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//    var key = argv[1];
-//    var valueStr = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.setValue(key,valueStr,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_value(argv) {
-//    if (argv.length != 3) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//    var key = argv[1];
-//    var encrypt = argv[2];
-//    hivefile.getValue(key,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function delete_value(argv) {
-//    if (argv.length != 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//    var key = argv[1];
-//
-//    hivefile.deleteValueFromKey(key).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function put_ipfs_file(argv) {
-//    if (argv.length != 3) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//    var sourceFilePath = argv[1];
-//    var encrypt = argv[2];
-//    hivefile.putIPFSFile(sourceFilePath,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function put_ipfs_buffer(argv) {
-//    if (argv.length != 3) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var sourceString = argv[1];
-//    var encrypt = argv[2];
-//    hivefile.putIPFSFileFromBuffer(sourceString,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_ipfs_file_length(argv) {
-//    if (argv.length != 2) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var cid = argv[1];
-//    hivefile.getIPFSFileLength(cid).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_ipfs_buffer(argv) {
-//    if (argv.length != 3) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var cid = argv[1];
-//    var encrypt = argv[2];
-//    hivefile.getIPFSFileToBuffer(cid,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
-//
-//function get_ipfs_file(argv) {
-//    if (argv.length != 4) {
-//        display_others_msg("Invalid command syntax.");
-//        return;
-//    }
-//
-//    var cid = argv[1];
-//    var storePath = argv[2];
-//    var encrypt = argv[3];
-//
-//    hivefile.getIPFSFile(cid,storePath,encrypt).then(
-//        function (ret) {
-//            display_others_msg(JSON.stringify(ret));
-//        },
-//        function (error) {
-//            display_others_msg("Create HiveFile error! " + error);
-//        });
-//}
+function put_string_ipfs(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(ipfs==null){
+        display_others_msg("Please getIPFS first.");
+        return;
+    }
+
+    var data = argv[1];
+
+    ipfs.put(data).then(
+        function (ret) {
+            display_others_msg(ret.status);
+            display_others_msg("cid is " + ret.cid);
+        },
+        function (error) {
+            display_others_msg("Put string error! " + error);
+        });
+}
+function get_string_ipfs(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(ipfs==null){
+        display_others_msg("Please getIPFS first.");
+        return;
+    }
+
+    var cid = argv[1];
+
+    ipfs.get(cid).then(
+        function (ret) {
+            display_others_msg(ret.status);
+            display_others_msg("content is " + ret.content);
+        },
+        function (error) {
+            display_others_msg("get string error! " + error);
+        });
+}
+
+function get_size_ipfs(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    if(ipfs==null){
+        display_others_msg("Please getIPFS first.");
+        return;
+    }
+
+    var cid = argv[1];
+
+    ipfs.size(cid).then(
+        function (ret) {
+            display_others_msg(ret.status);
+            display_others_msg("size is " + ret.length);
+        },
+        function (error) {
+            display_others_msg("get string error! " + error);
+        });
+}
 
 function onLauncher() {
     appManager.launcher();
@@ -885,7 +573,7 @@ var onedrive_opts = {
 
 var ipfs_opts = {
     driveType: "3",
-    ip:"10.0.2.2",
+    ip:"3.133.166.156",
     port:5001
 };
 

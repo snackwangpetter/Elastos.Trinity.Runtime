@@ -53,11 +53,12 @@ class ClientBuilder {
     private static Client.Options createIPFSOptions(String storePath, String jsonStr) throws JSONException, HiveException {
         IPFSOptions.Builder options = new IPFSOptions.Builder().setStorePath(storePath);
         JSONObject json = new JSONObject(jsonStr);
-        JSONArray array = json.getJSONArray("nodes");
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject item = array.getJSONObject(i);
-            options.addRpcNode(new IPFSOptions.RpcNode(item.getString("ip"), item.getInt("port")));
-        }
+//        JSONArray array = json.getJSONArray("nodes");
+//        for (int i = 0; i < array.length(); i++) {
+//            JSONObject item = array.getJSONObject(i);
+//            options.addRpcNode(new IPFSOptions.RpcNode(item.getString("ip"), item.getInt("port")));
+//        }
+        options.addRpcNode(new IPFSOptions.RpcNode(json.getString("ip"), json.getInt("port")));
         return options.build();
     }
 //
