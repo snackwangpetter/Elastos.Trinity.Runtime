@@ -571,10 +571,21 @@ var onedrive_opts = {
     redirectUrl: "http://localhost:12345"
 };
 
+var nodes = []
+var persons = [
+    {name: "tina", age: 14},
+    {name: "timo", age: 15},
+    {name: "lily", age: 16},
+    {name: "lucy", age: 16}
+]
 var ipfs_opts = {
     driveType: "3",
-    ip:"3.133.166.156",
-    port:5001
+    nodes:[
+           {ip:"127.0.0.1",port:5001},
+           {ip:"3.133.166.156",port:5001}
+           {ip:"13.59.79.222",port:5001}
+           {ip:"3.133.71.168",port:5001}
+          ]
 };
 
 var app = {
