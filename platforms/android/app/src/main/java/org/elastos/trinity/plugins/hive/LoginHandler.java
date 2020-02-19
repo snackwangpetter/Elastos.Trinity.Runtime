@@ -24,7 +24,6 @@ package org.elastos.trinity.plugins.hive;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
-import org.elastos.hive.utils.LogUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,8 +51,6 @@ class LoginHandler implements Authenticator {
         JSONObject ret = new JSONObject();
         try {
             ret.put("url", requestUrl);
-
-            LogUtil.d("============url==========="+requestUrl);
             sendEvent(ret);
         } catch (JSONException e) {
             e.printStackTrace();

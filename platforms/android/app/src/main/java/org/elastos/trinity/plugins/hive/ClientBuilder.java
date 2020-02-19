@@ -60,52 +60,18 @@ class ClientBuilder {
         }
         return options.build();
     }
-//
-//    private static OneDriveConnectOptions createOneDriveOption(String storePath, String jsonStr, Authenticator authenticator) throws JSONException {
-//        JSONObject json = new JSONObject(jsonStr);
-//        String clientId = json.getString("clientId");
-//        String scope = json.getString("scope");
-//        String redirectUrl = json.getString("redirectUrl");
-//        return new OneDriveConnectOptions(clientId, scope, redirectUrl, storePath, authenticator);
-//    }
-//
-//    private static IPFSConnectOptions createIPFSConnectOption(String jsonStr) throws JSONException {
-//        JSONObject json = new JSONObject(jsonStr);
-//        String ip = json.getString("ip");
-//        int port = json.getInt("port");
-//
-//        HiveRpcNode[] hiveRpcNodes = {new HiveRpcNode(ip, port)};
-//        return new IPFSConnectOptions(hiveRpcNodes);
-//    }
 
     static Client createClient(String storePath, String options, Authenticator authenticator) throws Exception {
         JSONObject jsonObject = new JSONObject(options);
         int type = jsonObject.getInt("driveType");
         Client client;
-//
-//        Client.Options options = new OneDriveOptions
-//                .Builder()
-//                .setStorePath(storePath)
-//                .setClientId(CLIENTID)
-//                .setRedirectUrl(REDIRECTURL)
-//                .setAuthenticator(authenticator)
-//                .build();
-//
-//        LogUtil.d("type = " + type);
-//        HiveClientOptions clientOptions = new HiveClientOptions();
-//        HiveClient client = HiveClient.createInstance(clientOptions);
-//
-//        IHiveConnect connect = null;
-
 
         switch (type) {
             case ONEDRIVE:
                 client = Client.createInstance(createOneDriveOptions(storePath, options, authenticator));
-//                connect = client.connect(createOneDriveOption(storePath, options, authenticator));
                 break;
 
             case IPFS:
-//                connect = client.connect(createIPFSConnectOption(options));
                 client = Client.createInstance(createIPFSOptions(storePath, options));
                 break;
             default:
@@ -114,28 +80,4 @@ class ClientBuilder {
 
         return client;
     }
-
-//    static IHiveConnect createConnect(String storePath, String options, Authenticator authenticator) throws Exception {
-//        JSONObject jsonObject = new JSONObject(options);
-//        int type = jsonObject.getInt("driveType");
-//
-//        LogUtil.d("type = " + type);
-//        HiveClientOptions clientOptions = new HiveClientOptions();
-//        HiveClient client = HiveClient.createInstance(clientOptions);
-//
-//        IHiveConnect connect = null;
-//
-//        switch (type) {
-//            case ONEDRIVE:
-//                connect = client.connect(createOneDriveOption(storePath, options, authenticator));
-//                break;
-//
-//            case IPFS:
-//                connect = client.connect(createIPFSConnectOption(options));
-//                break;
-//        }
-//
-//        return connect;
-//    }
-
 }

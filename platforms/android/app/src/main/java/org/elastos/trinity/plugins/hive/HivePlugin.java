@@ -29,7 +29,6 @@ import org.elastos.hive.Client;
 import org.elastos.hive.interfaces.Files;
 import org.elastos.hive.interfaces.IPFS;
 import org.elastos.hive.interfaces.KeyValues;
-import org.elastos.hive.utils.LogUtil;
 import org.elastos.trinity.runtime.TrinityPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -161,8 +160,6 @@ HivePlugin extends TrinityPlugin {
         String dataDir = cordova.getActivity().getFilesDir() + "/data/hive/" + args.getString(0);
         String options = args.getString(0);
         int handlerId = args.getInt(1);
-        LogUtil.d("option === " + options);
-        LogUtil.d("handlerId === " + handlerId);
         java.io.File dirFile = new java.io.File(dataDir);
         if (!dirFile.exists()) dirFile.mkdirs();
         new Thread(() -> {
@@ -175,35 +172,18 @@ HivePlugin extends TrinityPlugin {
                 JSONObject ret = new JSONObject();
                 ret.put("clientId", clientObjId);
 
-                LogUtil.d("====" + clientObjId);
                 callbackContext.success(ret);
             } catch (Exception e) {
             }
         }).start();
     }
 
-//    private void connect(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int clientId = args.getInt(0);
-//        Client client = hiveClientMap.get(clientId);
-//        try {
-//            client. connect();
-//            callbackContext.success("success");
-//        } catch (HiveException e) {
-//            e.printStackTrace();
-//            callbackContext.error("error");
-//        }
-//    }
-
     private void isConnected(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        LogUtil.d("---------->111111111111111111");
         int clientId = args.getInt(0);
         Client client = hiveClientMap.get(clientId);
         boolean isConnect = client.isConnected();
         JSONObject ret = new JSONObject();
         ret.put("isConnect", isConnect);
-
-
-        LogUtil.d("---------->"+isConnect);
         callbackContext.success(ret);
     }
 
@@ -259,13 +239,6 @@ HivePlugin extends TrinityPlugin {
 
 
     private void putStringForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int clientId = args.getInt(0);
-//        String remoteFile = args.getString(1);
-//        String data = args.getString(2);
-//
-//        Client client = hiveClientMap.get(clientId);
-//        client.getFiles().put(data, remoteFile, crateResultHandler(ResultHandler.Type.Void));
-
         int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
         String data = args.getString(2);
@@ -275,12 +248,6 @@ HivePlugin extends TrinityPlugin {
     }
 
     private void getAsStringForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int clientId = args.getInt(0);
-//        String remoteFile = args.getString(1);
-//
-//        Client client = hiveClientMap.get(clientId);
-//        client.getFiles().getAsString(remoteFile, crateResultHandler(ResultHandler.Type.String));
-
         int filesId = args.getInt(0);
         String remoteFile = args.getString(1);
 
@@ -294,12 +261,6 @@ HivePlugin extends TrinityPlugin {
 
         Files api = filesMap.get(filesId);
         api.size(remoteFile, crateResultHandler(ResultHandler.Type.Length));
-
-//        int clientId = args.getInt(0);
-//        String remoteFile = args.getString(1);
-//
-//        Client client = hiveClientMap.get(clientId);
-//        client.getFiles().size(remoteFile, crateResultHandler(ResultHandler.Type.Length));
     }
 
     private void deleteForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -308,12 +269,6 @@ HivePlugin extends TrinityPlugin {
 
         Files api = filesMap.get(filesId);
         api.delete(remoteFile, crateResultHandler(ResultHandler.Type.Void));
-
-//        int clientId = args.getInt(0);
-//        String remoteFile = args.getString(1);
-//
-//        Client client = hiveClientMap.get(clientId);
-//        client.getFiles().delete(remoteFile, crateResultHandler(ResultHandler.Type.Void));
     }
 
     private void listForFiles(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -321,11 +276,6 @@ HivePlugin extends TrinityPlugin {
 
         Files api = filesMap.get(filesId);
         api.list(crateResultHandler(ResultHandler.Type.FileList));
-
-//        int clientId = args.getInt(0);
-//
-//        Client client = hiveClientMap.get(clientId);
-//        client.getFiles().list(crateResultHandler(ResultHandler.Type.FileList));
     }
 
     private void putStringIPFS(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -357,7 +307,6 @@ HivePlugin extends TrinityPlugin {
         String key = args.getString(1);
         String value = args.getString(2);
 
-//        Client client = hiveClientMap.get(clientId);
         KeyValues api = keyValuesMap.get(keyValuesId);
         api.putValue(key, value, crateResultHandler(ResultHandler.Type.Void));
     }
@@ -386,204 +335,9 @@ HivePlugin extends TrinityPlugin {
         KeyValues api = keyValuesMap.get(keyValuesId);
         api.deleteKey(key, crateResultHandler(ResultHandler.Type.Void));
     }
-//    private void createConnection(JSONArray args, CallbackContext callbackContext) throws JSONException, HiveException {
-//        String dataDir = cordova.getActivity().getFilesDir() + "/data/hive/" + args.getString(0);
-//
-//        String options = args.getString(0);
-//        int handlerId = args.getInt(1);
-//
-//        LogUtil.d("option = " + options);
-//        LogUtil.d("handlerId = " + handlerId);
-//        java.io.File dirFile = new java.io.File(dataDir);
-//        if (!dirFile.exists()) dirFile.mkdirs();
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    IHiveConnect connect = ClientBuilder.createConnect(dataPath, options, new LoginHandler(handlerId, loginCallbackCtxt));
-//                    int connectObjId = System.identityHashCode(connect);
-//                    hiveConnectMap.put(connectObjId, connect);
-//                    JSONObject ret = new JSONObject();
-//                    ret.put("connectId", connectObjId);
-//                    callbackContext.success(ret);
-//                } catch (Exception e) {
-//                }
-//            }
-//        }).start();
-//    }
-//
-//    private void createHiveFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int connectObjId = args.getInt(0);
-//        String filePath = args.getString(1);
-//
-//        IHiveConnect hiveConnect = hiveConnectMap.get(connectObjId);
-//
-//
-//        HiveFile hiveFile = hiveConnect.createHiveFile(filePath);
-//
-//        int hiveFileObjId = System.identityHashCode(hiveFile);
-//
-//        hiveFileMap.put(hiveFileObjId, hiveFile);
-//
-//        JSONObject ret = new JSONObject();
-//        ret.put("fileId", hiveFileObjId);
-//        callbackContext.success(ret);
-//    }
-//
-//    private void putFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//        String sourceFilename = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.putFile(destFilename, sourceFilename, encrypt, crateResultHandler());
-//    }
-//
-//    private void putFileFromBuffer(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//        String sourceString = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//                hiveFile.putFileFromBuffer(destFilename, sourceString.getBytes(), encrypt, crateResultHandler());
-//            }
-//        }).start();
-//
-//    }
-//
-//    private void getFileLength(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFileLength(destFilename, crateResultHandler());
-//    }
-//
-//    private void getFileToBuffer(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//        boolean encrypt = args.getBoolean(2);
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFileToBuffer(destFilename, encrypt, crateResultHandler());
-//    }
-//
-//    private void getFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//        String storeFilePath = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFile(destFilename, encrypt, storeFilePath, crateResultHandler());
-//    }
-//
-//    private void deleteFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String destFilename = args.getString(1);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.deleteFile(destFilename, crateResultHandler());
-//    }
-//
-//    private void listFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.listFile(crateResultHandler());
-//    }
-//
-//    private void putValue(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String key = args.getString(1);
-//        String valueStr = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.putValue(key, valueStr.getBytes(), encrypt, crateResultHandler());
-//    }
-//
-//    private void setValue(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String key = args.getString(1);
-//        String valueStr = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.setValue(key, valueStr.getBytes(), encrypt, crateResultHandler());
-//    }
-//
-//    private void getValue(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String key = args.getString(1);
-//        boolean encrypt = args.getBoolean(2);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getValue(key, encrypt, crateResultHandler());
-//    }
-//
-//    private void deleteValueFromKey(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String key = args.getString(1);
-//
-//        IHiveFile hiveFile = (IHiveFile) hiveFileMap.get(fileObjId);
-//        hiveFile.deleteValueFromKey(key, crateResultHandler());
-//    }
-//
-//
-//    private void putIPFSFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String sourceFilePath = args.getString(1);
-//        boolean encrypt = args.getBoolean(2);
-//
-//        IPFSFile hiveFile = (IPFSFile) hiveFileMap.get(fileObjId);
-//        hiveFile.putFile(sourceFilePath, encrypt, crateResultHandler());
-//    }
-//
-//    private void putIPFSFileFromBuffer(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String sourceString = args.getString(1);
-//        boolean encrypt = args.getBoolean(2);
-//
-//        IPFSFile hiveFile = (IPFSFile) hiveFileMap.get(fileObjId);
-//        hiveFile.putFileFromBuffer(sourceString.getBytes(), encrypt, crateResultHandler());
-//    }
-//
-//    private void getIPFSFileLength(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String cidStr = args.getString(1);
-//
-//        IPFSFile hiveFile = (IPFSFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFileLength(new CID(cidStr), crateResultHandler());
-//    }
-//
-//    private void getIPFSFileToBuffer(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String cidStr = args.getString(1);
-//        boolean encrypt = args.getBoolean(2);
-//
-//        IPFSFile hiveFile = (IPFSFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFileToBuffer(new CID(cidStr), encrypt, crateResultHandler());
-//    }
-//
-//    private void getIPFSFile(JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        int fileObjId = args.getInt(0);
-//        String cidStr = args.getString(1);
-//        String storeFilePath = args.getString(2);
-//        boolean encrypt = args.getBoolean(3);
-//
-//        LogUtil.d("cidStr = " + cidStr);
-//        LogUtil.d("storeFilePath = " + storeFilePath);
-//        LogUtil.d("encrypt = " + encrypt);
-//
-//        IPFSFile hiveFile = (IPFSFile) hiveFileMap.get(fileObjId);
-//        hiveFile.getFile(new CID(cidStr), encrypt, storeFilePath, crateResultHandler());
-//    }
 
     private ResultHandler crateResultHandler(ResultHandler.Type type) {
-        resultId = resultId + 2;
+        resultId ++;
         return new ResultHandler(resultId, type, resultCallbackCtxt);
     }
 }

@@ -25,7 +25,6 @@ package org.elastos.trinity.plugins.hive;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.elastos.hive.exception.HiveException;
-import org.elastos.hive.utils.LogUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
