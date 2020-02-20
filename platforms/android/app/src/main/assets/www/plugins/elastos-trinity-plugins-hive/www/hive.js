@@ -92,20 +92,34 @@ var ClientImpl = /** @class */ (function () {
         this.files = [];
         this.keyValues = [];
     }
-    // login(handler: Function, onSuccess?: () => void, onError?: (err: string) => void) {
-    //     var handlerId = this.plugin.addLoginRequestCb(handler);
-    //     exec(onSuccess, onError, 'HivePlugin', 'login', [this.clazz, this.objId, handlerId]);
-    // }
-    // logout(onSuccess?: () => void, onError?: (err: string) => void) {
-    //     exec(onSuccess, onError, 'HivePlugin', 'logout', [this.clazz, this.objId]);
-    // }
+
+    ClientImpl.prototype.connect = function (onSuccess, onError) {
+        var me = this;
+        var _onSuccess = function (ret) {
+            if (onSuccess)
+                onSuccess(ret.status);
+        };
+        var _onError = function(){
+            if(onError)
+                onError(ret)
+        }
+        exec(_onSuccess, onError, 'HivePlugin', 'connect', [this.objId]);
+    };
+
+    ClientImpl.prototype.disConnect = function (onSuccess, onError) {
+        var me = this;
+        var _onSuccess = function (ret) {
+            if (onSuccess)
+                onSuccess(ret.status);
+        };
+        exec(_onSuccess, onError, 'HivePlugin', 'disConnect', [this.objId]);
+    };
     ClientImpl.prototype.isConnected = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
             if (onSuccess)
                 onSuccess(ret.isConnect);
         };
-        alert(this.objId);
         exec(_onSuccess, onError, 'HivePlugin', 'isConnected', [this.objId]);
     };
     ClientImpl.prototype.getIPFS = function (onSuccess, onError) {

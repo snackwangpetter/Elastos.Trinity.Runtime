@@ -30,7 +30,7 @@ function set_msg(side, avatar, content) {
         '<div class="reply-content pr"><span class="arrow">&nbsp;</span>' +
         content + '</div></div></li>';
     $("#msg_content").append(msg);
-    $("html, body").animate({ scrollTop: $(document).height()}, "slow");
+    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
 }
 
 function display_me_msg(content) {
@@ -42,33 +42,33 @@ function display_others_msg(content) {
 }
 
 var client_commands = [
-    { name: "onedrive", fn: create_onedrive_client  },
-    { name: "ipfs",     fn: create_ipfs_client      }
+    { name: "onedrive", fn: create_onedrive_client },
+    { name: "ipfs", fn: create_ipfs_client }
 ]
 
 function do_client_command(input) {
-     var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
-     if (!args || args[0] == "") {
-         return;
-     }
+    var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
+    if (!args || args[0] == "") {
+        return;
+    }
 
-     args[0] = args[0].toLowerCase()
+    args[0] = args[0].toLowerCase()
 
-     for (var i = 0; i < client_commands.length; i++) {
-         if (client_commands[i].name == args[0]) {
-             client_commands[i].fn();
-             return;
-         }
-     }
-     display_others_msg("Unknown client name:" + args[0]);
- }
+    for (var i = 0; i < client_commands.length; i++) {
+        if (client_commands[i].name == args[0]) {
+            client_commands[i].fn();
+            return;
+        }
+    }
+    display_others_msg("Unknown client name:" + args[0]);
+}
 
 function create_onedrive_client() {
     $('input').unbind('keypress');
 
     var success = function (ret) {
         do_onedrive_command("help");
-        client = ret ;
+        client = ret;
         display_others_msg("created onedrive client successfully");
 
         $("input").focus();
@@ -87,7 +87,7 @@ function create_onedrive_client() {
     hiveManager.createClient(
         function (url) {
             cordova.InAppBrowser.open(url, "_system", "location=yes");
-        }, onedrive_opts,success, null);
+        }, onedrive_opts, success, null);
 }
 
 function create_ipfs_client() {
@@ -95,7 +95,7 @@ function create_ipfs_client() {
 
     var success = function (ret) {
         do_ipfs_command("help");
-        client = ret ;
+        client = ret;
         display_others_msg("created ipfs client successfully");
 
         $("input").focus();
@@ -111,39 +111,48 @@ function create_ipfs_client() {
         });
     }
 
-    hiveManager.createClient(null,ipfs_opts, success, null);
+    hiveManager.createClient(null, ipfs_opts, success, null);
 }
 
 var ipfs_commands = [
-    { cmd: "help",      fn: help_ipfs,                   help: "help [cmd]"  },
-    { cmd: "version",   fn: get_version,            help: "version"     },
+    { cmd: "help", fn: help_ipfs, help: "help [cmd]" },
+    { cmd: "version", fn: get_version, help: "version" },
 
-    { cmd: "getipfs",            fn: get_ipfs,           help: "getipfs"},
+    { cmd: "connect", fn: connect, help: "connect" },
+    { cmd: "disconnect", fn: disconnect, help: "disconnect" },
 
-    { cmd: "put",           fn: put_string_ipfs,           help: "put [data]"},
-    { cmd: "get",           fn: get_string_ipfs,           help: "get [cid]"},
-    { cmd: "size",           fn: get_size_ipfs,           help: "size [cid]"},
+    { cmd: "isconnected", fn: show_connect_status, help: "isconnected" },
+
+    { cmd: "getipfs", fn: get_ipfs, help: "getipfs" },
+
+    { cmd: "put", fn: put_string_ipfs, help: "put [data]" },
+    { cmd: "get", fn: get_string_ipfs, help: "get [cid]" },
+    { cmd: "size", fn: get_size_ipfs, help: "size [cid]" },
 ]
 
 
 var onedrive_commands = [
-    { cmd: "help",      fn: help_onedrive,                   help: "help [cmd]"  },
-    { cmd: "version",   fn: get_version,            help: "version"     },
-    { cmd: "isconnected",            fn: show_connect_status,           help: "isconnected"},
+    { cmd: "help", fn: help_onedrive, help: "help [cmd]" },
+    { cmd: "version", fn: get_version, help: "version" },
 
-    { cmd: "getfiles",            fn: get_files,           help: "getfiles"},
-    { cmd: "getkeyvalues",            fn: get_keyvalues,           help: "getkeyvalues"},
+    { cmd: "connect", fn: connect, help: "connect" },
+    { cmd: "disconnect", fn: disconnect, help: "disconnect" },
 
-    { cmd: "put",           fn: put_string_files,           help: "put [remoteFile] [data]"},
-    { cmd: "get",           fn: get_string_files,           help: "get [remoteFile]"},
-    { cmd: "size",           fn: get_size_files,           help: "size [remoteFile]"},
-    { cmd: "delete",           fn: delete_file_files,           help: "delete [remoteFile]"},
-    { cmd: "list",           fn: list_files,           help: "list"},
+    { cmd: "isconnected", fn: show_connect_status, help: "isconnected" },
 
-    { cmd: "putvalue",           fn: put_value,           help: "putvalue [key] [value]"},
-    { cmd: "setvalue",           fn: set_value,           help: "setvalue [key] [value]"},
-    { cmd: "getvalues",           fn: get_values,           help: "getvalues [key]"},
-    { cmd: "deletekey",           fn: delete_key,           help: "deletekey [key]"},
+    { cmd: "getfiles", fn: get_files, help: "getfiles" },
+    { cmd: "getkeyvalues", fn: get_keyvalues, help: "getkeyvalues" },
+
+    { cmd: "put", fn: put_string_files, help: "put [remoteFile] [data]" },
+    { cmd: "get", fn: get_string_files, help: "get [remoteFile]" },
+    { cmd: "size", fn: get_size_files, help: "size [remoteFile]" },
+    { cmd: "delete", fn: delete_file_files, help: "delete [remoteFile]" },
+    { cmd: "list", fn: list_files, help: "list" },
+
+    { cmd: "putvalue", fn: put_value, help: "putvalue [key] [value]" },
+    { cmd: "setvalue", fn: set_value, help: "setvalue [key] [value]" },
+    { cmd: "getvalues", fn: get_values, help: "getvalues [key]" },
+    { cmd: "deletekey", fn: delete_key, help: "deletekey [key]" },
 ]
 
 function do_ipfs_command(input) {
@@ -162,19 +171,19 @@ function do_ipfs_command(input) {
 }
 
 function do_onedrive_command(input) {
-     var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
-     if (!args || args[0] == "") {
-         return;
-     }
-     args[0] = args[0].toLowerCase()
-     for (var i = 0; i < onedrive_commands.length; i++) {
-         if (onedrive_commands[i].cmd == args[0]) {
-             onedrive_commands[i].fn(args);
-             return;
-         }
-     }
-     display_others_msg("Unknown command:" + args[0]);
- }
+    var args = input.trim().match(/[^\s"]+|"([^"]*)"/g);
+    if (!args || args[0] == "") {
+        return;
+    }
+    args[0] = args[0].toLowerCase()
+    for (var i = 0; i < onedrive_commands.length; i++) {
+        if (onedrive_commands[i].cmd == args[0]) {
+            onedrive_commands[i].fn(args);
+            return;
+        }
+    }
+    display_others_msg("Unknown command:" + args[0]);
+}
 
 function help_onedrive(args) {
     if (args.length > 1) {
@@ -230,14 +239,14 @@ function get_version(args) {
 }
 
 function show_connect_status(argv) {
-     if (argv.length != 1) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
-    var success = function (ret) {
-        display_others_msg("Connect status is "+ret);
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
     }
-     client.isConnected(success,null);
+    var success = function (ret) {
+        display_others_msg("Connect status is " + ret);
+    }
+    client.isConnected(success, null);
 }
 
 var client;
@@ -245,157 +254,186 @@ var ipfs;
 var files;
 var keyvalues;
 
-function get_ipfs(argv) {
-     if (argv.length != 1) {
-          display_others_msg("Invalid command syntax.");
-          return;
-      }
-     var success = function (ret) {
-         ipfs = ret;
-         display_others_msg("success");
-     }
+function connect(argv) {
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+    var success = function (ret) {
+        display_others_msg(ret);
+    }
+    var error = function (error) {
+        display_others_msg("Error is " + error);
+    }
+    client.connect(success, error);
+}
 
-      client.getIPFS(success,null);
+function disconnect(argv) {
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+    var success = function (ret) {
+        display_others_msg(ret);
+    }
+    var error = function (error) {
+        display_others_msg("Error is " + error);
+    }
+    client.disconnect(success, error);
+}
+
+function get_ipfs(argv) {
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
+
+    var success = function (ret) {
+        ipfs = ret;
+        display_others_msg("success");
+    }
+
+    client.getIPFS(success, null);
 }
 
 function get_files(argv) {
-     if (argv.length != 1) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
     var success = function (ret) {
         files = ret;
         display_others_msg("success");
     }
 
-     client.getFiles(success,null);
+    client.getFiles(success, null);
 }
 
 function get_keyvalues(argv) {
-     if (argv.length != 1) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
     var success = function (ret) {
         keyvalues = ret;
         display_others_msg("success");
     }
 
-     client.getKeyValues(success,null);
- }
+    client.getKeyValues(success, null);
+}
 
 
 
 function put_string_files(argv) {
-     if (argv.length != 3) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+    if (argv.length != 3) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-     if(files==null){
-         display_others_msg("Please getFiles first.");
-         return;
-     }
+    if (files == null) {
+        display_others_msg("Please getfiles first.");
+        return;
+    }
 
-     var remoteFile = argv[1];
-     var data = argv[2];
+    var remoteFile = argv[1];
+    var data = argv[2];
 
-     files.put(remoteFile,data).then(
-         function (ret) {
-             display_others_msg(ret.status);
-         },
-         function (error) {
-             display_others_msg("Put string error! " + error);
-         });
- }
+    files.put(remoteFile, data).then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("Put string error! " + error);
+        });
+}
 
- function get_string_files(argv) {
-     if (argv.length != 2) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+function get_string_files(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-     if(files==null){
-         display_others_msg("Please getFiles first.");
-         return;
-     }
+    if (files == null) {
+        display_others_msg("Please getfiles first.");
+        return;
+    }
 
-     var remoteFile = argv[1];
+    var remoteFile = argv[1];
 
-     files.getAsString(remoteFile).then(
-         function (ret) {
-             display_others_msg(ret.status);
-             display_others_msg("content is "+ret.content);
-         },
-         function (error) {
-             display_others_msg("Get string error! " + error);
-         });
- }
+    files.getAsString(remoteFile).then(
+        function (ret) {
+            display_others_msg(ret.status);
+            display_others_msg("content is " + ret.content);
+        },
+        function (error) {
+            display_others_msg("Get string error! " + error);
+        });
+}
 
- function get_size_files(argv) {
-     if (argv.length != 2) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+function get_size_files(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-     if(files==null){
-         display_others_msg("Please getFiles first.");
-         return;
-     }
+    if (files == null) {
+        display_others_msg("Please getfiles first.");
+        return;
+    }
 
-     var remoteFile = argv[1];
+    var remoteFile = argv[1];
 
-     files.size(remoteFile).then(
-         function (ret) {
-             display_others_msg(ret.status);
-             display_others_msg("Length is "+ret.length);
-         },
-         function (error) {
-             display_others_msg("Get size error! " + error);
-         });
- }
+    files.size(remoteFile).then(
+        function (ret) {
+            display_others_msg(ret.status);
+            display_others_msg("Length is " + ret.length);
+        },
+        function (error) {
+            display_others_msg("Get size error! " + error);
+        });
+}
 
- function delete_file_files(argv) {
-     if (argv.length != 2) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+function delete_file_files(argv) {
+    if (argv.length != 2) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-     if(files==null){
-         display_others_msg("Please getFiles first.");
-         return;
-     }
+    if (files == null) {
+        display_others_msg("Please getfiles first.");
+        return;
+    }
 
-     var remoteFile = argv[1];
+    var remoteFile = argv[1];
 
-     files.deleteFile(remoteFile).then(
-         function (ret) {
-             display_others_msg(ret.status);
-         },
-         function (error) {
-             display_others_msg("Delete file error! " + error);
-         });
- }
+    files.deleteFile(remoteFile).then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("Delete file error! " + error);
+        });
+}
 
- function list_files(argv) {
-      if (argv.length != 1) {
-          display_others_msg("Invalid command syntax.");
-          return;
-      }
+function list_files(argv) {
+    if (argv.length != 1) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-      if(files==null){
-          display_others_msg("Please getFiles first.");
-          return;
-      }
+    if (files == null) {
+        display_others_msg("Please getfiles first.");
+        return;
+    }
 
-      files.list().then(
-          function (ret) {
-              display_others_msg(ret.fileList);
-          },
-          function (error) {
-              display_others_msg("Delete file error! " + error);
-          });
-  }
+    files.list().then(
+        function (ret) {
+            display_others_msg(ret.fileList);
+        },
+        function (error) {
+            display_others_msg("Delete file error! " + error);
+        });
+}
 
 function put_value(argv) {
     if (argv.length != 3) {
@@ -403,15 +441,15 @@ function put_value(argv) {
         return;
     }
 
-    if(keyvalues==null){
-        display_others_msg("Please getKeyValues first.");
+    if (keyvalues == null) {
+        display_others_msg("Please getkeyvalues first.");
         return;
     }
 
     var key = argv[1];
     var value = argv[2];
 
-    keyvalues.putValue(key,value).then(
+    keyvalues.putValue(key, value).then(
         function (ret) {
             display_others_msg(ret.status);
         },
@@ -421,27 +459,27 @@ function put_value(argv) {
 }
 
 function set_value(argv) {
-     if (argv.length != 3) {
-         display_others_msg("Invalid command syntax.");
-         return;
-     }
+    if (argv.length != 3) {
+        display_others_msg("Invalid command syntax.");
+        return;
+    }
 
-     if(keyvalues==null){
-         display_others_msg("Please getKeyValues first.");
-         return;
-     }
+    if (keyvalues == null) {
+        display_others_msg("Please getkeyvalues first.");
+        return;
+    }
 
-     var key = argv[1];
-     var value = argv[2];
+    var key = argv[1];
+    var value = argv[2];
 
-     keyvalues.setValue(key,value).then(
-         function (ret) {
-             display_others_msg(ret.status);
-         },
-         function (error) {
-             display_others_msg("Set value error! " + error);
-         });
- }
+    keyvalues.setValue(key, value).then(
+        function (ret) {
+            display_others_msg(ret.status);
+        },
+        function (error) {
+            display_others_msg("Set value error! " + error);
+        });
+}
 
 function get_values(argv) {
     if (argv.length != 2) {
@@ -449,8 +487,8 @@ function get_values(argv) {
         return;
     }
 
-    if(keyvalues==null){
-        display_others_msg("Please getKeyValues first.");
+    if (keyvalues == null) {
+        display_others_msg("Please getkeyvalues first.");
         return;
     }
 
@@ -472,8 +510,8 @@ function delete_key(argv) {
         return;
     }
 
-    if(keyvalues==null){
-        display_others_msg("Please getKeyValues first.");
+    if (keyvalues == null) {
+        display_others_msg("Please getkeyvalues first.");
         return;
     }
 
@@ -494,8 +532,8 @@ function put_string_ipfs(argv) {
         return;
     }
 
-    if(ipfs==null){
-        display_others_msg("Please getIPFS first.");
+    if (ipfs == null) {
+        display_others_msg("Please getipfs first.");
         return;
     }
 
@@ -516,8 +554,8 @@ function get_string_ipfs(argv) {
         return;
     }
 
-    if(ipfs==null){
-        display_others_msg("Please getIPFS first.");
+    if (ipfs == null) {
+        display_others_msg("Please getipfs first.");
         return;
     }
 
@@ -539,8 +577,8 @@ function get_size_ipfs(argv) {
         return;
     }
 
-    if(ipfs==null){
-        display_others_msg("Please getIPFS first.");
+    if (ipfs == null) {
+        display_others_msg("Please getipfs first.");
         return;
     }
 
@@ -573,12 +611,12 @@ var onedrive_opts = {
 
 var ipfs_opts = {
     driveType: "3",
-    nodes:[
-           {ip:"127.0.0.1",port:5001},
-           {ip:"3.133.166.156",port:5001},
-           {ip:"13.59.79.222",port:5001},
-           {ip:"3.133.71.168",port:5001}
-          ]
+    nodes: [
+        { ip: "127.0.0.1", port: 5001 },
+        { ip: "3.133.166.156", port: 5001 },
+        { ip: "13.59.79.222", port: 5001 },
+        { ip: "3.133.71.168", port: 5001 }
+    ]
 };
 
 var app = {
@@ -589,8 +627,8 @@ var app = {
 
     onDeviceReady: function () {
         var msg = "Create which client："
-                    + "<br/> 1.onedrive"
-                    + "<br/> 2.ipfs";
+            + "<br/> 1.onedrive"
+            + "<br/> 2.ipfs";
         display_others_msg(msg);
 
         $("input").focus();
@@ -608,4 +646,3 @@ var app = {
 };
 
 app.initialize();
-

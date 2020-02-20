@@ -72,6 +72,8 @@ HivePlugin extends TrinityPlugin {
                     break;
                 case "createClient":
                     this.createClient(args, callbackContext);
+                case "connect":
+                    this.connect(args, callbackContext);
                     break;
                 case "disconnect":
                     this.disConnect(args, callbackContext);
@@ -162,20 +164,17 @@ HivePlugin extends TrinityPlugin {
         int handlerId = args.getInt(1);
         java.io.File dirFile = new java.io.File(dataDir);
         if (!dirFile.exists()) dirFile.mkdirs();
-        new Thread(() -> {
-            try {
-                Client client = ClientBuilder.createClient(dataPath, options, new LoginHandler(handlerId, loginCallbackCtxt));
-                client.connect();
+        try {
+            Client client = ClientBuilder.createClient(dataPath, options, new LoginHandler(handlerId, loginCallbackCtxt));
+            int clientObjId = System.identityHashCode(client);
+            hiveClientMap.put(clientObjId, client);
+            JSONObject ret = new JSONObject();
+            ret.put("clientId", clientObjId);
 
-                int clientObjId = System.identityHashCode(client);
-                hiveClientMap.put(clientObjId, client);
-                JSONObject ret = new JSONObject();
-                ret.put("clientId", clientObjId);
-
-                callbackContext.success(ret);
-            } catch (Exception e) {
-            }
-        }).start();
+            callbackContext.success(ret);
+        } catch (Exception e) {
+            callbackContext.error(e.getLocalizedMessage());
+        }
     }
 
     private void isConnected(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -185,6 +184,21 @@ HivePlugin extends TrinityPlugin {
         JSONObject ret = new JSONObject();
         ret.put("isConnect", isConnect);
         callbackContext.success(ret);
+    }
+
+    private void connect(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        int clientId = args.getInt(0);
+        Client client = hiveClientMap.get(clientId);
+        new Thread(() -> {
+            try {
+                client.connect();
+                JSONObject ret = new JSONObject();
+                ret.put("status","success");
+                callbackContext.success(ret);
+            } catch (Exception e) {
+                callbackContext.success(e.getLocalizedMessage());
+            }
+        }).start();
     }
 
     private void disConnect(JSONArray args, CallbackContext callbackContext) throws JSONException {
