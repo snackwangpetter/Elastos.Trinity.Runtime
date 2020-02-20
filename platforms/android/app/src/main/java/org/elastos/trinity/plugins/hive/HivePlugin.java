@@ -206,6 +206,7 @@ HivePlugin extends TrinityPlugin {
         Client client = hiveClientMap.get(clientId);
         client.disconnect();
         JSONObject ret = new JSONObject();
+        ret.put("status","success");
         callbackContext.success(ret);
     }
 

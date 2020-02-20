@@ -1,5 +1,4 @@
 cordova.define("elastos-trinity-plugins-hive.HivePlugin", function(require, exports, module) {
-
 "use strict";
 /*
  * Copyright (c) 2019 Elastos Foundation
@@ -92,20 +91,14 @@ var ClientImpl = /** @class */ (function () {
         this.files = [];
         this.keyValues = [];
     }
-
     ClientImpl.prototype.connect = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {
             if (onSuccess)
                 onSuccess(ret.status);
         };
-        var _onError = function(){
-            if(onError)
-                onError(ret)
-        }
         exec(_onSuccess, onError, 'HivePlugin', 'connect', [this.objId]);
     };
-
     ClientImpl.prototype.disConnect = function (onSuccess, onError) {
         var me = this;
         var _onSuccess = function (ret) {

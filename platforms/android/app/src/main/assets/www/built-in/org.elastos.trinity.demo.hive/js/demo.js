@@ -243,8 +243,8 @@ function show_connect_status(argv) {
         display_others_msg("Invalid command syntax.");
         return;
     }
-    var success = function (ret) {
-        display_others_msg("Connect status is " + ret);
+    var success = function (isConnect) {
+        display_others_msg("Connect status is " + isConnect);
     }
     client.isConnected(success, null);
 }
@@ -259,8 +259,8 @@ function connect(argv) {
         display_others_msg("Invalid command syntax.");
         return;
     }
-    var success = function (ret) {
-        display_others_msg(ret);
+    var success = function (status) {
+        display_others_msg(status);
     }
     var error = function (error) {
         display_others_msg("Error is " + error);
@@ -273,8 +273,8 @@ function disconnect(argv) {
         display_others_msg("Invalid command syntax.");
         return;
     }
-    var success = function (ret) {
-        display_others_msg(ret);
+    var success = function (status) {
+        display_others_msg(status);
     }
     var error = function (error) {
         display_others_msg("Error is " + error);

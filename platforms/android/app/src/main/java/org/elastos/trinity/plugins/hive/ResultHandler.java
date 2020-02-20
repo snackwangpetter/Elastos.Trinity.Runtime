@@ -145,9 +145,8 @@ class ResultHandler<T> implements Callback<T> {
     private JSONObject errorJson(String errorMsg) throws JSONException {
         JSONObject ret = new JSONObject();
         ret.put("status", "error");
-        ret.put("error", errorMsg);
+        ret.put("msg", errorMsg);
         return ret;
-
     }
 
     enum Type {
